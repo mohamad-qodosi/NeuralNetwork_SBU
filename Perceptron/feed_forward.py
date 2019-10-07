@@ -1,4 +1,4 @@
-from get_data import get_data_and as data
+from get_data import get_normal_distribution as data
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -15,21 +15,39 @@ def plot_decision_boundary(W, xx):
     plt.plot(xx, yy, 'k--')
 
 
-X, y = data()
+X, d = data()
 X = np.hstack((np.ones((X.shape[0], 1)), X)) # appends '1' to every data vector as "on-neuron"
 
-W = np.array([[-3, 2, 2]])
+W = np.random.random((1, 3))
+learning_rate = 0.1
+
+w_change = True
+epoch = 0
+while w_change and epoch < 200:
+    w_change = False
+    for j in range(X.shape[0]):
+        z = np.dot(X[j], W.transpose())
+        y = hardlim(z)
+
+        if d[j] != y:
+            W = W + (learning_rate * (d[j] - y) * X[j])
+            w_change = True
+    epoch += 1
+
 z = np.dot(X, W.transpose())
-h = hardlim(z)
+y = hardlim(z)[:, 0]
 
-print('predicted :', h.transpose())
-print('expected :', y.transpose())
-print('accuracy :', (y == h).mean())
+print('weights :', W)
+print('predicted :', d)
+print('expected :', y)
+print('accuracy :', (y == d).mean())
 
-for point, label in zip(X, y):
+for point, label in zip(X, d):
     plt.plot(point[1], point[2], 'bx' if label == 0 else 'ro', markersize=8)
 
 t = np.linspace(X[:, 1].min() - 1, X[:, 1].max() + 1, 10)
 plot_decision_boundary(W, t)
+plt.ylim([X[:, 2].min() - 1, X[:, 2].max() + 1])
+plt.xlim([X[:, 1].min() - 1, X[:, 1].max() + 1])
 
 plt.show()
