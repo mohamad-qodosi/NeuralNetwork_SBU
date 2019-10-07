@@ -1,4 +1,4 @@
-from get_data import get_normal_distribution as data
+from get_data import get_data_or as data
 import numpy as np
 import matplotlib.pyplot as plt
 
