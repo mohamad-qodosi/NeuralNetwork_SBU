@@ -1,4 +1,4 @@
-from get_data import get_data_or as data
+from Data.get_data import get_normal_distribution2D as data
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -15,7 +15,17 @@ def plot_decision_boundary(W, xx):
     plt.plot(xx, yy, 'k--')
 
 
-X, d = data()
+classes_mean = [
+    [-3, -3],
+    [4, 4]
+                ]
+
+classes_cov = [
+    [[5, 0], [0, 5]],
+    [[3, 0], [0, 3]]
+                ]
+
+X, d = data(classes_mean, classes_cov)
 X = np.hstack((np.ones((X.shape[0], 1)), X)) # appends '1' to every data vector as "on-neuron"
 
 W = np.random.random((1, 3))
